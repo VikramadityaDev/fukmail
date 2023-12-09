@@ -41,7 +41,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const url = "https://free-tempmail-api.p.rapidapi.com/newmail";
 
     final headers = {
-      "X-RapidAPI-Key": "YOUR_API_KEY",
+      "X-RapidAPI-Key": "f8dc80a4f6mshd9276ef433304e8p1c5755jsnd7fe9f7b9aa3",
       "X-RapidAPI-Host": "free-tempmail-api.p.rapidapi.com"
     };
 
@@ -53,7 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const mailsUrl = "https://free-tempmail-api.p.rapidapi.com/mails";
     final mailsHeaders = {
       "mailtoken": token,
-      "X-RapidAPI-Key": "YOUR_API_KEY",
+      "X-RapidAPI-Key": "f8dc80a4f6mshd9276ef433304e8p1c5755jsnd7fe9f7b9aa3",
       "X-RapidAPI-Host": "free-tempmail-api.p.rapidapi.com"
     };
 
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
     const mailsUrl = "https://free-tempmail-api.p.rapidapi.com/mails";
     final mailsHeaders = {
       "mailtoken": token,
-      "X-RapidAPI-Key": "YOUR_API_KEY",
+      "X-RapidAPI-Key": "f8dc80a4f6mshd9276ef433304e8p1c5755jsnd7fe9f7b9aa3",
       "X-RapidAPI-Host": "free-tempmail-api.p.rapidapi.com"
     };
 
@@ -80,9 +80,9 @@ class _MyHomePageState extends State<MyHomePage> {
     final mailsInfo = jsonDecode(mailsResponse.body);
     final updatedMessage = mailsInfo["mails"][0]["intro"].toString();
     final toEmail = mailsInfo["mails"][0]["from"]["address"].toString();
-    debugPrint(mailsInfo);
+    print(mailsInfo);
     setState(() {
-      message = updatedMessage;
+      this.message = updatedMessage;
       this.toEmail = toEmail;
     });
   }
