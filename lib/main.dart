@@ -35,9 +35,15 @@ class _MyHomePageState extends State<MyHomePage> {
   String message = '';
   String token = '';
   String toEmail = '';
+  bool isLoading = false;
+  bool isRefreshing = false;
+  bool isRefreshed = false;
 
 
   Future<void> fetchData() async {
+    setState(() {
+      isLoading = true;
+    });
     const url = "https://free-tempmail-api.p.rapidapi.com/newmail";
 
     final headers = {
@@ -62,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
     final message = mailsInfo["message"].toString();
 
     setState(() {
+      isLoading = false;
       this.email = email;
       this.token = token;
       this.message = message;
@@ -69,6 +76,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> updateMessage() async {
+    setState(() {
+      isRefreshing = true;
+    });
     const mailsUrl = "https://free-tempmail-api.p.rapidapi.com/mails";
     final mailsHeaders = {
       "mailtoken": token,
@@ -82,6 +92,10 @@ class _MyHomePageState extends State<MyHomePage> {
     final toEmail = mailsInfo["mails"][0]["from"]["address"].toString();
     print(mailsInfo);
     setState(() {
+      isRefreshing = false;
+      if (!isRefreshed) {
+        isRefreshed = true;
+      }
       this.message = updatedMessage;
       this.toEmail = toEmail;
     });
@@ -135,8 +149,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.purple),
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                   ),
-                  onPressed: fetchData,
-                  child: const Text('Generate Email'),
+                  onPressed: () => isLoading ? null : fetchData(),
+                  child: isLoading
+                      ? const Text('Loading...')
+                      : const Text('Generate Email'),
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
@@ -144,8 +160,18 @@ class _MyHomePageState extends State<MyHomePage> {
                     backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                   ),
-                  onPressed: updateMessage,
-                  child: const Text('Refresh Message'),
+                  onPressed: () {
+                    if (!isRefreshed) {
+                      updateMessage();
+                    } else {
+                      setState(() {
+                        isRefreshed = false;
+                      });
+                    }
+                  },
+                  child: isRefreshing
+                      ? const Text('Waiting For Inbox...')
+                      : const Text('Refresh Message'),
                 ),
               ],
             ),
